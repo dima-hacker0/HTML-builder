@@ -1,5 +1,4 @@
 const fs = require('fs');
-const chalk = require('chalk')
 const { readdir } = require('fs').promises
 const { access } = require('fs');
 const { constants } = require('fs');
@@ -43,4 +42,4 @@ async function push() {
 
 push();
 
-console.log(chalk.magenta('Операция завершена успешно;)'));
+console.log('Операция завершена успешно;)');

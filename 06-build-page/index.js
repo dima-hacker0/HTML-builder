@@ -1,5 +1,4 @@
 const fs = require('fs');
-const chalk = require('chalk')
 const { readdir } = require('fs').promises
 const { access } = require('fs/promises');
 const { constants } = require('fs');

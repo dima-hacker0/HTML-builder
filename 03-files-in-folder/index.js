@@ -1,6 +1,5 @@
 const { readdir } = require('fs').promises
 const path = require('path')
-const chalk = require('chalk')
 {withFileTypes: true}
 
 const {stat} = require('fs');
@@ -39,7 +38,7 @@ async function push() {
                         return;
                     }
                     console.log(`${firstName} - ${secondName} - ${stats.size/1024} mb`);
-                    console.log(chalk.yellow('-------------------------------'));
+                    console.log('-------------------------------');
 
                 });
             }
@@ -50,7 +49,7 @@ async function push() {
         console.error(err);
     }
 }
-console.log(chalk.magenta('Информация о файлах:'));
-console.log(chalk.magenta('-------------------------------'));
+console.log('Информация о файлах:');
+console.log('-------------------------------');
 
 push();

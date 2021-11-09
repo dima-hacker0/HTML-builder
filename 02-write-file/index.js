@@ -1,5 +1,4 @@
 const fs = require('fs');
-const chalk = require('chalk')
 
 const readline = require('readline');
 
@@ -9,7 +8,7 @@ const rl = readline.createInterface({
 })
 let first = false;
 
-console.log(chalk.magenta('Запишите текст в файл'));
+console.log('Запишите текст в файл');
 
 rl.on('line', (input) => {
     inputFake = input;
@@ -24,11 +23,11 @@ rl.on('line', (input) => {
     });
 
     if(input == 'exit') {
-        console.log(chalk.green('Всего хорошего)'));
+        console.log('Всего хорошего)');
 
         process.exit();
     }
 })
 process.on('beforeExit', function() {
-    console.log(chalk.green('Всего хорошего)'));
+    console.log('Всего хорошего)');
 });
