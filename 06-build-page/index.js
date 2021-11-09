@@ -105,82 +105,38 @@ async function push() {
 push();
 
 var mainFile = fs.createReadStream(__dirname + '/template.html', 'utf-8');
-
-var headerReplace = fs.createReadStream(__dirname + '/components/header.html', 'utf-8');
-
-var articlesReplace = fs.createReadStream(__dirname + '/components/articles.html', 'utf-8');
-
-var footerReplace = fs.createReadStream(__dirname + '/components/footer.html', 'utf-8');
-
 let mainHtmlChange;
+
 mainFile.on('data', function(temp) {
     mainHtmlChange = temp;
-  
-    copyHtml();
+    pushHtml();
 });
 
-function copyHtml() {
-    
-    var regHeader = /{{header}}/;
-
-    headerReplace.on('data', function(temp) {
-        mainHtmlChange = mainHtmlChange.replace(regHeader, temp);
-
-        fs.writeFile("06-build-page/project-dist/index.html", mainHtmlChange, function(error){
- 
-            if(error) throw error;
-            
+async function pushHtml() {
+    try {
+        const files = await readdir(path.join(__dirname, 'components'), {
+            withFileTypes: true,
         });
-      
-    });
+        for (const file of files) {
+            let fileName = '';
+            for(let i = 0; file.name[i] != '.' ; i++) fileName += file.name[i];
 
-    var regArticles = /{{articles}}/;
+            let fileFoRead =  fs.createReadStream(__dirname + `/components/${file.name}`, 'utf-8');
 
-    articlesReplace.on('data', function(temp) {
-        mainHtmlChange = mainHtmlChange.replace(regArticles, temp);
+            var regFileForRead = new RegExp(`{{${fileName}}}`);
 
+            for await (const chunk of fileFoRead) {
+                mainHtmlChange = mainHtmlChange.replace(regFileForRead, chunk);
+            }
+
+        }
         fs.writeFile("06-build-page/project-dist/index.html", mainHtmlChange, function(error){
- 
+        
             if(error) throw error;
-            
+        
         });
-      
-    });
-
-    var regFooter = /{{footer}}/;
-
-    footerReplace.on('data', function(temp) {
-        mainHtmlChange = mainHtmlChange.replace(regFooter, temp);
-
-        fs.writeFile("06-build-page/project-dist/index.html", mainHtmlChange, function(error){
- 
-            if(error) throw error;
-            
-        });
-      
-    });
-
-    fs.access(__dirname + '/components/about.html', function(error){
-        if (error) {
-            console.log("Файл 'about.html' не найден");
-        } 
-
-        else {
-            var someReplace = fs.createReadStream(__dirname + '/components/about.html', 'utf-8');
-
-            var regAbout = /{{about}}/;
-
-            someReplace.on('data', function(temp) {
-
-                mainHtmlChange = mainHtmlChange.replace(regAbout, temp);
-
-                fs.writeFile("06-build-page/project-dist/index.html", mainHtmlChange, function(error){
-
-                    if(error) throw error;
-                
-                });
-      
-            });
-        }   
-    });
+    }
+    catch (err) {
+        console.log(err);
+    }
 }
